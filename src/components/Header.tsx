@@ -16,7 +16,6 @@ export function Header() {
               alt="AfroPlan Logo" 
               className="h-12 w-auto object-contain"
             />
-            <span className="text-2xl text-[#191919]">AfroPlan</span>
           </div>
 
           {/* Desktop Navigation */}
