@@ -1,6 +1,7 @@
 import { Hono } from 'npm:hono';
 import { cors } from 'npm:hono/cors';
 import { logger } from 'npm:hono/logger';
+import { createClient } from 'jsr:@supabase/supabase-js@2.49.8';
 import * as kv from './kv_store.tsx';
 
 const app = new Hono();
@@ -10,6 +11,84 @@ app.use('*', cors());
 app.use('*', logger(console.log));
 
 // Routes
+
+// POST /make-server-0130ebd3/signup - Créer un nouvel utilisateur
+app.post('/make-server-0130ebd3/signup', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { email, password, name } = body;
+
+    if (!email || !password) {
+      return c.json({ error: 'Email et mot de passe requis' }, 400);
+    }
+
+    // Créer le client Supabase avec la clé de service
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') || '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '',
+    );
+
+    // Créer l'utilisateur via l'API Admin
+    const { data, error } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      user_metadata: { name: name || email.split('@')[0] },
+      // Confirmer automatiquement l'email car aucun serveur d'email n'est configuré
+      email_confirm: true
+    });
+
+    if (error) {
+      console.error('Erreur lors de la création de l\'utilisateur:', error);
+      return c.json({ error: error.message }, 400);
+    }
+
+    return c.json({ 
+      user: data.user,
+      message: 'Compte créé avec succès'
+    }, 201);
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription:', error);
+    return c.json({ error: 'Erreur lors de l\'inscription' }, 500);
+  }
+});
+
+// POST /make-server-0130ebd3/login - Connecter un utilisateur
+app.post('/make-server-0130ebd3/login', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { email, password } = body;
+
+    if (!email || !password) {
+      return c.json({ error: 'Email et mot de passe requis' }, 400);
+    }
+
+    // Créer le client Supabase avec la clé publique pour l'authentification
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') || '',
+      Deno.env.get('SUPABASE_ANON_KEY') || '',
+    );
+
+    // Connecter l'utilisateur
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      console.error('Erreur lors de la connexion:', error);
+      return c.json({ error: 'Email ou mot de passe incorrect' }, 401);
+    }
+
+    return c.json({ 
+      user: data.user,
+      access_token: data.session?.access_token,
+      message: 'Connexion réussie'
+    }, 200);
+  } catch (error) {
+    console.error('Erreur lors de la connexion:', error);
+    return c.json({ error: 'Erreur lors de la connexion' }, 500);
+  }
+});
 
 // GET /make-server-0130ebd3/salons - Récupérer tous les salons
 app.get('/make-server-0130ebd3/salons', async (c) => {

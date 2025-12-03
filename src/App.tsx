@@ -52,10 +52,11 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [selectedSalonId, setSelectedSalonId] = useState<string | null>(null);
   const [showBookingSuccess, setShowBookingSuccess] = useState(false);
+  const [authRefresh, setAuthRefresh] = useState(0);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [authRefresh]);
 
   const loadData = async () => {
     try {
@@ -226,10 +227,14 @@ export default function App() {
     return <LoadingState />;
   }
 
+  const handleAuthChange = () => {
+    setAuthRefresh(prev => prev + 1);
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Toaster position="top-right" richColors />
-      <Header />
+      <Header onAuthChange={handleAuthChange} />
       
       <main className="container mx-auto px-8 py-12 max-w-[1400px]">
         {/* Hero Section */}
