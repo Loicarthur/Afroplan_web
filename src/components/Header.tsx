@@ -118,9 +118,15 @@ export function Header({ onAuthChange }: HeaderProps) {
                   </a>
                 </nav>
 
-                {/* CTA Button */}
-                <div className="hidden md:flex items-center">
-                  <button 
+                {/* CTA Buttons */}
+                <div className="hidden md:flex items-center gap-4">
+                  <button
+                    onClick={() => openAuthModal('signup')}
+                    className="bg-transparent px-6 py-3 rounded-[30px] text-[#191919] border border-[#191919] hover:bg-[#191919] hover:text-white transition-colors"
+                  >
+                    Inscription
+                  </button>
+                  <button
                     onClick={() => openAuthModal('login')}
                     className="bg-[#191919] px-6 py-3 rounded-[30px] text-white border border-[#191919] hover:bg-transparent hover:text-[#191919] transition-colors"
                   >
@@ -188,12 +194,20 @@ export function Header({ onAuthChange }: HeaderProps) {
                   <a href="#temoignages" className="text-[#191919] hover:opacity-70 transition-opacity py-2">
                     Témoignages
                   </a>
-                  <button 
-                    onClick={() => openAuthModal('login')}
-                    className="bg-[#191919] px-6 py-3 rounded-[30px] text-white border border-[#191919] w-full mt-4"
-                  >
-                    Connexion
-                  </button>
+                  <div className="flex flex-col gap-3 mt-4">
+                    <button
+                      onClick={() => openAuthModal('signup')}
+                      className="bg-transparent px-6 py-3 rounded-[30px] text-[#191919] border border-[#191919] w-full"
+                    >
+                      Inscription
+                    </button>
+                    <button
+                      onClick={() => openAuthModal('login')}
+                      className="bg-[#191919] px-6 py-3 rounded-[30px] text-white border border-[#191919] w-full"
+                    >
+                      Connexion
+                    </button>
+                  </div>
                 </nav>
               )}
             </div>
