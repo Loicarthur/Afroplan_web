@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import imgLogo from "figma:asset/e65661fb57ddd5e9a1e3272e08c1c43817734871.png";
+import imgLogo from "../assets/logo.png";
 import { Menu, X, User, Calendar, Heart, LogOut } from 'lucide-react';
 import { AuthModal } from './AuthModal';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
@@ -202,7 +202,7 @@ export function Header({ onAuthChange }: HeaderProps) {
                   </button>
                   <button
                     onClick={() => openAuthModal('login')}
-                    className="bg-[#191919] px-6 py-3 rounded-[30px] text-white border border-[#191919] w-full mt-2"
+                    className="bg-[#191919] px-6 py-3 rounded-[30px] text-white border border-[#191919] w-full"
                   >
                     Connexion
                   </button>
