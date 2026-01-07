@@ -26,21 +26,21 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 px-8 bg-[#f9f8f8] rounded-[30px] my-24">
+    <section id="comment-ca-marche" className="py-8 md:py-16 px-4 md:px-8 bg-[#f9f8f8] rounded-[20px] md:rounded-[30px] my-12 md:my-24">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-8 md:mb-12"
       >
-        <h2 className="text-[32px] text-[#191919] mb-4">Comment ça marche ?</h2>
-        <p className="text-[20px] text-[#191919] opacity-70">
+        <h2 className="text-2xl md:text-[32px] text-[#191919] mb-3 md:mb-4">Comment ça marche ?</h2>
+        <p className="text-base md:text-[20px] text-[#191919] opacity-70">
           Réservez votre coiffeur en 4 étapes simples
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
         {steps.map((step, index) => (
           <motion.div
             key={index}
@@ -50,24 +50,26 @@ export function HowItWorks() {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className="relative"
           >
-            <div className="bg-white rounded-[30px] p-8 text-center h-full flex flex-col items-center border-2 border-transparent hover:border-[#191919] transition-all duration-300">
+            <div className="bg-white rounded-[20px] md:rounded-[30px] p-6 md:p-8 text-center h-full flex flex-col items-center border-2 border-transparent hover:border-[#191919] transition-all duration-300">
               {/* Step Number */}
-              <div className="absolute -top-4 -left-4 bg-[#191919] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">
+              <div className="absolute -top-3 -left-3 md:-top-4 md:-left-4 bg-[#191919] text-white rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-lg md:text-xl">
                 {index + 1}
               </div>
 
               {/* Icon */}
-              <div className="bg-[#f9f8f8] rounded-full p-6 mb-4 text-[#191919]">
-                {step.icon}
+              <div className="bg-[#f9f8f8] rounded-full p-4 md:p-6 mb-3 md:mb-4 text-[#191919]">
+                <div className="w-6 h-6 md:w-8 md:h-8">
+                  {step.icon}
+                </div>
               </div>
 
               {/* Title */}
-              <h3 className="text-[22px] text-[#191919] mb-3">
+              <h3 className="text-lg md:text-[22px] text-[#191919] mb-2 md:mb-3">
                 {step.title}
               </h3>
 
               {/* Description */}
-              <p className="text-[#191919] opacity-70 text-sm leading-relaxed">
+              <p className="text-[#191919] opacity-70 text-xs md:text-sm leading-relaxed">
                 {step.description}
               </p>
             </div>

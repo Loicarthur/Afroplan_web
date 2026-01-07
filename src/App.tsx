@@ -236,17 +236,17 @@ export default function App() {
       <Toaster position="top-right" richColors />
       <Header onAuthChange={handleAuthChange} />
       
-      <main className="container mx-auto px-8 py-12 max-w-[1400px]">
+      <main className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-[1400px]">
         {/* Hero Section */}
-        <section className="mb-24">
-          <div className="content-stretch flex flex-col gap-[30px] items-center mb-12 text-center">
+        <section className="mb-12 md:mb-24">
+          <div className="content-stretch flex flex-col gap-5 md:gap-[30px] items-center mb-8 md:mb-12 text-center px-2">
             <HeroAnimation delay={0.1}>
-              <h1 className="relative shrink-0 text-[36px] text-[#191919] max-w-4xl leading-tight">
+              <h1 className="relative shrink-0 text-2xl md:text-[36px] lg:text-[42px] text-[#191919] max-w-4xl leading-tight">
                 Trouvez vos coiffeurs spécialiste cheveux afro ou bouclé
               </h1>
             </HeroAnimation>
             <HeroAnimation delay={0.2}>
-              <p className="relative shrink-0 text-[24px] text-[#191919] opacity-80">
+              <p className="relative shrink-0 text-base md:text-lg lg:text-[24px] text-[#191919] opacity-80">
                 Réservez en ligne avec les meilleurs professionnels près de chez vous
               </p>
             </HeroAnimation>
@@ -259,14 +259,14 @@ export default function App() {
 
         {/* Past Appointments Section */}
         {pastAppointments.length > 0 && (
-          <section className="mb-24">
+          <section className="mb-12 md:mb-24">
             <FadeIn delay={0.4}>
-              <h2 className="text-[28px] text-black mb-12">
+              <h2 className="text-xl md:text-[28px] text-black mb-6 md:mb-12">
                 Mes rendez-vous passés
               </h2>
             </FadeIn>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
               {pastAppointments.map((appointment, index) => (
                 <ScaleIn key={appointment.id} delay={0.5 + index * 0.1}>
                   <AppointmentCard appointment={appointment} />
@@ -285,27 +285,27 @@ export default function App() {
         {/* Recommended Salons Section */}
         <section>
           <FadeIn delay={0.5}>
-            <div className="flex items-center justify-between mb-12 flex-wrap gap-6">
-              <div className="flex flex-col gap-[15px]">
-                <h2 className="text-[24px] text-[#191919]">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 md:mb-12 gap-4 md:gap-6">
+              <div className="flex flex-col gap-2 md:gap-[15px]">
+                <h2 className="text-xl md:text-[24px] text-[#191919]">
                   Coiffeurs recommandés
                 </h2>
-                <p className="text-[22px] text-[#191919] opacity-80">
+                <p className="text-base md:text-[22px] text-[#191919] opacity-80">
                   Les meilleurs professionnels sélectionnés pour vous
                 </p>
               </div>
-              
-              <button className="bg-[#f9f8f8] box-border content-stretch flex gap-[20px] items-center justify-center p-[20px] relative rounded-[30px] shrink-0 border border-[#191919] hover:bg-[#191919] hover:text-white transition-colors">
-                <span className="text-[18px]">Voir tous les coiffeurs</span>
+
+              <button className="bg-[#f9f8f8] box-border content-stretch flex gap-3 md:gap-[20px] items-center justify-center p-3 md:p-[20px] relative rounded-[20px] md:rounded-[30px] shrink-0 border border-[#191919] hover:bg-[#191919] hover:text-white transition-colors w-full md:w-auto">
+                <span className="text-sm md:text-[18px]">Voir tous les coiffeurs</span>
               </button>
             </div>
           </FadeIn>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-7">
             {salons.map((salon, index) => (
               <ScaleIn key={salon.id} delay={0.6 + index * 0.1}>
-                <SalonCard 
-                  salon={salon} 
+                <SalonCard
+                  salon={salon}
                   onClick={() => setSelectedSalonId(salon.id)}
                 />
               </ScaleIn>

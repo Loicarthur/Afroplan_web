@@ -27,21 +27,21 @@ export function Testimonials() {
   ];
 
   return (
-    <section className="py-16 my-24">
+    <section className="py-8 md:py-16 my-12 md:my-24">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-12"
+        className="text-center mb-8 md:mb-12 px-4"
       >
-        <h2 className="text-[32px] text-[#191919] mb-4">Ce que disent nos utilisateurs</h2>
-        <p className="text-[20px] text-[#191919] opacity-70">
+        <h2 className="text-2xl md:text-[32px] text-[#191919] mb-3 md:mb-4">Ce que disent nos utilisateurs</h2>
+        <p className="text-base md:text-[20px] text-[#191919] opacity-70">
           Des milliers de clients satisfaits
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
         {testimonials.map((testimonial, index) => (
           <motion.div
             key={index}
@@ -49,35 +49,35 @@ export function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="bg-white rounded-[30px] p-8 border-2 border-[#f9f8f8] hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-xl relative"
+            className="bg-white rounded-[20px] md:rounded-[30px] p-6 md:p-8 border-2 border-[#f9f8f8] hover:border-[#191919] transition-all duration-300 shadow-sm hover:shadow-xl relative"
           >
             {/* Quote Icon */}
-            <div className="absolute -top-4 -left-4 bg-[#191919] rounded-full p-3">
-              <Quote className="text-white" size={20} />
+            <div className="absolute -top-3 -left-3 md:-top-4 md:-left-4 bg-[#191919] rounded-full p-2 md:p-3">
+              <Quote className="text-white" size={16} />
             </div>
 
             {/* Stars */}
-            <div className="flex gap-1 mb-4">
+            <div className="flex gap-1 mb-3 md:mb-4">
               {[...Array(testimonial.rating)].map((_, i) => (
-                <Star key={i} size={18} className="fill-[#191919] text-[#191919]" />
+                <Star key={i} size={16} className="fill-[#191919] text-[#191919]" />
               ))}
             </div>
 
             {/* Comment */}
-            <p className="text-[#191919] mb-6 leading-relaxed">
+            <p className="text-[#191919] text-sm md:text-base mb-4 md:mb-6 leading-relaxed">
               "{testimonial.comment}"
             </p>
 
             {/* User Info */}
-            <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+            <div className="flex items-center gap-3 md:gap-4 pt-3 md:pt-4 border-t border-gray-100">
               <img
                 src={testimonial.image}
                 alt={testimonial.name}
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
               />
               <div>
-                <p className="text-[#191919]">{testimonial.name}</p>
-                <p className="text-sm text-[#191919] opacity-60">{testimonial.service}</p>
+                <p className="text-[#191919] text-sm md:text-base">{testimonial.name}</p>
+                <p className="text-xs md:text-sm text-[#191919] opacity-60">{testimonial.service}</p>
               </div>
             </div>
           </motion.div>

@@ -3,9 +3,9 @@ import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="bg-[#191919] text-white mt-24">
-      <div className="container mx-auto px-8 py-16 max-w-[1400px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer className="bg-[#191919] text-white mt-12 md:mt-24">
+      <div className="container mx-auto px-4 md:px-8 py-8 md:py-16 max-w-[1400px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -111,11 +111,11 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-sm">
+        <div className="border-t border-white/10 mt-8 md:mt-12 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
+          <p className="text-gray-400 text-xs md:text-sm">
             © 2024 AfroPlan. Tous droits réservés.
           </p>
-          <div className="flex gap-6 text-sm text-gray-400">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 text-xs md:text-sm text-gray-400">
             <a href="#" className="hover:text-white transition-colors">
               Mentions légales
             </a>

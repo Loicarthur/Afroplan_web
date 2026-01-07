@@ -18,8 +18,8 @@ export function StatsSection() {
   ];
 
   return (
-    <section className="bg-[#191919] rounded-[30px] p-12 my-24">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section className="bg-[#191919] rounded-[20px] md:rounded-[30px] p-6 md:p-12 my-12 md:my-24">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
@@ -27,17 +27,19 @@ export function StatsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="flex flex-col items-center text-center gap-4"
+            className="flex flex-col items-center text-center gap-2 md:gap-4"
           >
             <div className="text-white opacity-80">
-              {stat.icon}
+              <div className="w-6 h-6 md:w-8 md:h-8">
+                {stat.icon}
+              </div>
             </div>
-            <CountUp 
-              end={stat.value} 
+            <CountUp
+              end={stat.value}
               suffix={stat.suffix}
               duration={2}
             />
-            <p className="text-white/70 text-sm">{stat.label}</p>
+            <p className="text-white/70 text-xs md:text-sm">{stat.label}</p>
           </motion.div>
         ))}
       </div>
@@ -70,7 +72,7 @@ function CountUp({ end, suffix, duration }: { end: number; suffix: string; durat
   }, [end, duration]);
 
   return (
-    <div className="text-white text-4xl">
+    <div className="text-white text-2xl md:text-4xl">
       {count.toLocaleString('fr-FR')}{suffix}
     </div>
   );
