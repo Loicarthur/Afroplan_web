@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import imgLogo from "../assets/logo.png";
 import { Menu, X, User, Calendar, Heart, LogOut } from 'lucide-react';
 import { AuthModal } from './AuthModal';
