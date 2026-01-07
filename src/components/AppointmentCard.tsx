@@ -22,51 +22,52 @@ export function AppointmentCard({ appointment }: AppointmentCardProps) {
 
   return (
     <>
-    <div className="bg-[#f9f8f8] box-border content-stretch flex gap-[20px] items-start p-[20px] relative rounded-[30px] shrink-0 border border-[#dfdada] hover:shadow-lg transition-shadow">
+    <div className="bg-[#f9f8f8] box-border content-stretch flex flex-col md:flex-row gap-4 md:gap-[20px] items-start p-4 md:p-[20px] relative rounded-[20px] md:rounded-[30px] shrink-0 border border-[#dfdada] hover:shadow-lg transition-shadow">
       {/* Content */}
-      <div className="content-stretch flex gap-[30px] items-start relative shrink-0 flex-1">
+      <div className="content-stretch flex flex-col md:flex-row gap-4 md:gap-[30px] items-start relative shrink-0 flex-1 w-full">
         {/* Image */}
-        <div className="h-[185px] relative rounded-[30px] shrink-0 w-[250px] overflow-hidden">
-          <img 
-            alt="" 
-            className="absolute inset-0 max-w-none object-center object-cover pointer-events-none rounded-[30px] size-full" 
-            src={appointment.image} 
+        <div className="h-[180px] md:h-[185px] relative rounded-[20px] md:rounded-[30px] shrink-0 w-full md:w-[250px] overflow-hidden">
+          <img
+            alt=""
+            className="absolute inset-0 max-w-none object-center object-cover pointer-events-none rounded-[20px] md:rounded-[30px] size-full"
+            src={appointment.image}
           />
         </div>
 
         {/* Details */}
-        <div className="content-stretch flex flex-col leading-[normal] not-italic relative shrink-0 text-black gap-4 flex-1">
-          <p className="relative shrink-0 text-[22px] text-nowrap whitespace-pre">
+        <div className="content-stretch flex flex-col leading-[normal] not-italic relative shrink-0 text-black gap-3 md:gap-4 flex-1 w-full">
+          <p className="relative shrink-0 text-lg md:text-[22px] break-words">
             {appointment.date} {appointment.time}
           </p>
           <div className="content-stretch flex flex-col gap-[5px] items-start relative shrink-0">
-            <p className="relative shrink-0 text-[16px] text-nowrap whitespace-pre">
+            <p className="relative shrink-0 text-sm md:text-[16px] break-words">
               {appointment.salonName}
             </p>
-            <p className="relative shrink-0 text-[14px] opacity-70">
+            <p className="relative shrink-0 text-xs md:text-[14px] opacity-70 break-words">
               {appointment.salonAddress}
             </p>
-            <p className="relative shrink-0 text-[14px] opacity-70">
+            <p className="relative shrink-0 text-xs md:text-[14px] opacity-70">
               {appointment.serviceType}
             </p>
-            <p className="relative shrink-0 text-[14px] opacity-70">
+            <p className="relative shrink-0 text-xs md:text-[14px] opacity-70">
               Durée: {appointment.duration}
             </p>
           </div>
-          <p className="relative shrink-0 text-[14px] text-nowrap whitespace-pre">
+          <p className="relative shrink-0 text-xs md:text-[14px]">
             Prix : {appointment.price}€
           </p>
         </div>
       </div>
 
       {/* Rating Button */}
-      <div 
+      <div
         onClick={() => setShowRatingModal(true)}
-        className="bg-white box-border content-stretch flex gap-[10px] items-center p-[10px] relative rounded-[30px] shrink-0 border border-[#191919] hover:bg-[#191919] hover:text-white transition-colors cursor-pointer group"
+        className="bg-white box-border content-stretch flex gap-[10px] items-center justify-center p-3 md:p-[10px] relative rounded-[20px] md:rounded-[30px] shrink-0 border border-[#191919] hover:bg-[#191919] hover:text-white transition-colors cursor-pointer group w-full md:w-auto"
       >
-        <div className="relative rounded-[30px] shrink-0 size-[40px]">
+        <div className="relative rounded-[20px] md:rounded-[30px] shrink-0 size-8 md:size-[40px]">
           <Star className="w-full h-full text-[#191919] group-hover:text-white group-hover:fill-white transition-colors" strokeWidth={1.5} />
         </div>
+        <span className="md:hidden text-sm">Noter ce rendez-vous</span>
       </div>
 
       {/* Rating Modal */}
