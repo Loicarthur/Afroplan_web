@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import svgPaths from "../imports/svg-2m7cmkaw8t";
-import imgBabyFace from "figma:asset/f7a12a6ef6fe87cdd8df59763dd3efb753254314.png";
+import imgBabyFace from "@/assets/f7a12a6ef6fe87cdd8df59763dd3efb753254314.png";
 import { Search, MapPin, ChevronDown, Home } from 'lucide-react';
 
 interface SearchBarProps {
