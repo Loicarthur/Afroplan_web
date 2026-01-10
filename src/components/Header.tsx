@@ -1,38 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import imgLogo from "@/assets/logo.png";
 import { Menu, X, User, Calendar, Heart, LogOut } from 'lucide-react';
 import { AuthModal } from './AuthModal';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HeaderProps {
   onAuthChange?: () => void;
 }
 
 export function Header({ onAuthChange }: HeaderProps) {
+  const { user, signOut } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-  const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    // Charger l'utilisateur depuis localStorage au chargement
-    const storedUser = localStorage.getItem('afroplan_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Erreur lors du chargement de l\'utilisateur:', error);
-        localStorage.removeItem('afroplan_user');
-        localStorage.removeItem('afroplan_access_token');
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    // Supprimer les données de localStorage
-    localStorage.removeItem('afroplan_user');
-    localStorage.removeItem('afroplan_access_token');
-    setUser(null);
+  const handleLogout = async () => {
+    await signOut();
     setIsMenuOpen(false);
     if (onAuthChange) {
       onAuthChange();
@@ -43,13 +26,6 @@ export function Header({ onAuthChange }: HeaderProps) {
     setAuthMode(mode);
     setAuthModalOpen(true);
     setIsMenuOpen(false);
-  };
-
-  const handleAuthSuccess = (userData: any) => {
-    setUser(userData);
-    if (onAuthChange) {
-      onAuthChange();
-    }
   };
 
   return (
@@ -214,11 +190,10 @@ export function Header({ onAuthChange }: HeaderProps) {
       </header>
 
       {/* Auth Modal */}
-      <AuthModal 
+      <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         mode={authMode}
-        onSuccess={handleAuthSuccess}
       />
     </>
   );

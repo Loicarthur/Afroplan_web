@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { X, Mail, Lock, User } from 'lucide-react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { toast } from 'sonner@2.0.3';
+import { useAuth } from '../contexts/AuthContext';
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
   mode: 'login' | 'signup';
-  onSuccess: (user: any) => void;
 }
 
-export function AuthModal({ isOpen, onClose, mode: initialMode, onSuccess }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, mode: initialMode }: AuthModalProps) {
+  const { signUp, signIn } = useAuth();
   const [mode, setMode] = useState(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,75 +28,29 @@ export function AuthModal({ isOpen, onClose, mode: initialMode, onSuccess }: Aut
 
     try {
       if (mode === 'signup') {
-        // Inscription via le serveur
-        const response = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/signup`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${publicAnonKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password, name })
-          }
-        );
+        const { error } = await signUp(email, password, name);
 
-        const data = await response.json();
-
-        if (response.ok) {
-          toast.success('Compte créé avec succès !');
-          // Connexion automatique après inscription
-          const loginResponse = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${publicAnonKey}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email, password })
-            }
-          );
-
-          const loginData = await loginResponse.json();
-
-          if (loginResponse.ok && loginData.user) {
-            // Stocker l'utilisateur dans localStorage
-            localStorage.setItem('afroplan_user', JSON.stringify(loginData.user));
-            localStorage.setItem('afroplan_access_token', loginData.access_token);
-            onSuccess(loginData.user);
-            onClose();
-          } else {
-            toast.error('Erreur lors de la connexion automatique');
-          }
+        if (error) {
+          toast.error(error.message || 'Erreur lors de l\'inscription');
         } else {
-          toast.error(data.error || 'Erreur lors de l\'inscription');
+          toast.success('Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.');
+          onClose();
+          // Réinitialiser les champs
+          setEmail('');
+          setPassword('');
+          setName('');
         }
       } else {
-        // Connexion via le serveur
-        const response = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/login`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${publicAnonKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-          }
-        );
+        const { error } = await signIn(email, password);
 
-        const data = await response.json();
-
-        if (response.ok && data.user) {
-          toast.success('Connexion réussie !');
-          // Stocker l'utilisateur dans localStorage
-          localStorage.setItem('afroplan_user', JSON.stringify(data.user));
-          localStorage.setItem('afroplan_access_token', data.access_token);
-          onSuccess(data.user);
-          onClose();
+        if (error) {
+          toast.error(error.message || 'Email ou mot de passe incorrect');
         } else {
-          toast.error(data.error || 'Email ou mot de passe incorrect');
+          toast.success('Connexion réussie !');
+          onClose();
+          // Réinitialiser les champs
+          setEmail('');
+          setPassword('');
         }
       }
     } catch (error) {
