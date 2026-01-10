@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import imgLogo from "@/assets/logo.png";
 import { Menu, X, User, Calendar, Heart, LogOut } from 'lucide-react';
 import { AuthModal } from './AuthModal';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { signOut, supabase } from '../utils/supabase/client';
 
 interface HeaderProps {
   onAuthChange?: () => void;
@@ -15,27 +15,59 @@ export function Header({ onAuthChange }: HeaderProps) {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    // Charger l'utilisateur depuis localStorage au chargement
-    const storedUser = localStorage.getItem('afroplan_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Erreur lors du chargement de l\'utilisateur:', error);
+    // Charger l'utilisateur depuis Supabase au chargement
+    const loadUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+        localStorage.setItem('afroplan_user', JSON.stringify(session.user));
+        localStorage.setItem('afroplan_access_token', session.access_token);
+      } else {
+        // Fallback sur localStorage si pas de session
+        const storedUser = localStorage.getItem('afroplan_user');
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (error) {
+            console.error('Erreur lors du chargement de l\'utilisateur:', error);
+            localStorage.removeItem('afroplan_user');
+            localStorage.removeItem('afroplan_access_token');
+          }
+        }
+      }
+    };
+
+    loadUser();
+
+    // Écouter les changements d'authentification
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+        localStorage.setItem('afroplan_user', JSON.stringify(session.user));
+        localStorage.setItem('afroplan_access_token', session.access_token);
+      } else {
+        setUser(null);
         localStorage.removeItem('afroplan_user');
         localStorage.removeItem('afroplan_access_token');
       }
-    }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
-  const handleLogout = () => {
-    // Supprimer les données de localStorage
-    localStorage.removeItem('afroplan_user');
-    localStorage.removeItem('afroplan_access_token');
-    setUser(null);
-    setIsMenuOpen(false);
-    if (onAuthChange) {
-      onAuthChange();
+  const handleLogout = async () => {
+    try {
+      // Se déconnecter de Supabase
+      await signOut();
+      setUser(null);
+      setIsMenuOpen(false);
+      if (onAuthChange) {
+        onAuthChange();
+      }
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
     }
   };
 

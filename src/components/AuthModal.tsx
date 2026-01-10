@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Mail, Lock, User } from 'lucide-react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { supabase } from '../utils/supabase/client';
 import { toast } from 'sonner@2.0.3';
 
 interface AuthModalProps {
@@ -28,75 +28,54 @@ export function AuthModal({ isOpen, onClose, mode: initialMode, onSuccess }: Aut
 
     try {
       if (mode === 'signup') {
-        // Inscription via le serveur
-        const response = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/signup`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${publicAnonKey}`,
-              'Content-Type': 'application/json'
+        // Inscription avec Supabase
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              name: name || email.split('@')[0]
             },
-            body: JSON.stringify({ email, password, name })
+            emailRedirectTo: window.location.origin
           }
-        );
+        });
 
-        const data = await response.json();
+        if (error) {
+          toast.error(error.message || 'Erreur lors de l\'inscription');
+          return;
+        }
 
-        if (response.ok) {
+        if (data.user) {
           toast.success('Compte créé avec succès !');
-          // Connexion automatique après inscription
-          const loginResponse = await fetch(
-            `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/login`,
-            {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${publicAnonKey}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email, password })
-            }
-          );
-
-          const loginData = await loginResponse.json();
-
-          if (loginResponse.ok && loginData.user) {
-            // Stocker l'utilisateur dans localStorage
-            localStorage.setItem('afroplan_user', JSON.stringify(loginData.user));
-            localStorage.setItem('afroplan_access_token', loginData.access_token);
-            onSuccess(loginData.user);
-            onClose();
-          } else {
-            toast.error('Erreur lors de la connexion automatique');
+          // Stocker l'utilisateur dans localStorage
+          localStorage.setItem('afroplan_user', JSON.stringify(data.user));
+          if (data.session?.access_token) {
+            localStorage.setItem('afroplan_access_token', data.session.access_token);
           }
-        } else {
-          toast.error(data.error || 'Erreur lors de l\'inscription');
+          onSuccess(data.user);
+          onClose();
         }
       } else {
-        // Connexion via le serveur
-        const response = await fetch(
-          `https://${projectId}.supabase.co/functions/v1/make-server-0130ebd3/login`,
-          {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${publicAnonKey}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-          }
-        );
+        // Connexion avec Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-        const data = await response.json();
+        if (error) {
+          toast.error(error.message || 'Email ou mot de passe incorrect');
+          return;
+        }
 
-        if (response.ok && data.user) {
+        if (data.user) {
           toast.success('Connexion réussie !');
           // Stocker l'utilisateur dans localStorage
           localStorage.setItem('afroplan_user', JSON.stringify(data.user));
-          localStorage.setItem('afroplan_access_token', data.access_token);
+          if (data.session?.access_token) {
+            localStorage.setItem('afroplan_access_token', data.session.access_token);
+          }
           onSuccess(data.user);
           onClose();
-        } else {
-          toast.error(data.error || 'Email ou mot de passe incorrect');
         }
       }
     } catch (error) {
